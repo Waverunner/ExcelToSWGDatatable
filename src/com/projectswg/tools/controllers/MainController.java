@@ -90,6 +90,7 @@ public class MainController implements Initializable {
         File workbook = fileChooser.showOpenDialog(Main.getInstance().getStage());
         if (workbook == null)
             return;
+        directoryField.setText(workbook.getAbsolutePath());
         try {
             handlePopulateList(workbook);
         } catch (IOException | InvalidFormatException e) {
@@ -117,6 +118,7 @@ public class MainController implements Initializable {
 
     private void handlePopulateList(File source) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(source);
+        outputSelectionList.clear();
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
             outputSelectionList.add(getFileItem(source.getAbsolutePath(), workbook.getSheetAt(0)));
         }

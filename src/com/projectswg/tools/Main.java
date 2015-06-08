@@ -100,7 +100,7 @@ public class Main extends Application {
         controller = fxmlLoader.getController();
         Parent parent = fxmlLoader.getRoot();
         Scene scene = new Scene(parent);
-
+        primaryStage.setTitle("Excel 2 SWG Iff Datatable Converter");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
