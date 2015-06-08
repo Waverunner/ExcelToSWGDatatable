@@ -136,7 +136,7 @@ public class MainController implements Initializable {
         Workbook workbook = WorkbookFactory.create(source);
         outputSelectionList.clear();
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-            outputSelectionList.add(getFileItem(source.getAbsolutePath(), workbook.getSheetAt(0)));
+            outputSelectionList.add(getFileItem(source.getAbsolutePath(), workbook.getSheetAt(i)));
         }
         workbook.close();
     }
