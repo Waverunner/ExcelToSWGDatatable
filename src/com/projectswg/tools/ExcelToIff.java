@@ -34,7 +34,7 @@ public class ExcelToIff {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("=== Excel->IFF Datatable Converter ===");
-        if (!args[0].equals("help"))
+        if (args == null || args.length == 0)
             displayHelpInfo();
 
         // First handle any command line arguments when starting up the program
@@ -107,7 +107,7 @@ public class ExcelToIff {
             System.out.println("Converting sheets from workbook " + file.getAbsolutePath());
             for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
                 Sheet sheet = workbook.getSheetAt(i);
-                path = file.getAbsolutePath().replace(".xls", "_") + sheet.getSheetName() + ".iff";
+                path = file.getAbsolutePath().split("\\.")[0] + "_" + sheet.getSheetName() + ".iff";
                 convertSheet(new File(path), sheet);
             }
             System.out.println("Conversion for workbook " + file.getAbsolutePath() + " completed.");
@@ -132,7 +132,7 @@ public class ExcelToIff {
                 System.err.println(String.format("Could not convert %s as there is no sheet name or id that is %s", path, sheetStr));
             }
             System.out.println("Converting sheet " + sheet.getSheetName() + " in workbook " + file.getAbsolutePath());
-            convertSheet(new File(file.getAbsolutePath().replace(".xls", ".iff")), sheet);
+            convertSheet(new File(file.getAbsolutePath().split("\\.")[0] + "_" + sheet.getSheetName() + ".iff"), sheet);
             System.out.println("Conversion for sheet " + sheet.getSheetName() + " in workbook " + file.getAbsolutePath() + " completed.");
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();

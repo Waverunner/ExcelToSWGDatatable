@@ -200,13 +200,6 @@ public class SwgExcelConverter {
             row.values[cellNum] = s;
         } else if (value instanceof Double) {
             int i = ((Double) value).intValue();
-
-            if (i == 0) {
-                Integer defValue = Integer.valueOf(getDefaultValue(types[cellNum]));
-                if (defValue != null)
-                    i = defValue;
-            }
-
             row.values[cellNum] = i;
         } else {
             System.err.println("\tCan't parse cell value " + value.getClass().getName());
