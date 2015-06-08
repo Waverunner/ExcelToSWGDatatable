@@ -83,7 +83,6 @@ public class SwgExcelConverter {
         rowList.forEach(datatableRow -> datatableRow.encode(data));
 
         rows.setChunkData(data);
-        System.out.println("\tInserted chunk ROWS");
     }
 
     private int createTableColumnData(SWGFile swgFile, Row row) {
@@ -113,7 +112,6 @@ public class SwgExcelConverter {
         }
 
         cols.setChunkData(data);
-        System.out.println("\tInserted chunk COLS");
         return count;
     }
 
@@ -124,7 +122,7 @@ public class SwgExcelConverter {
 
         int count = row.getPhysicalNumberOfCells();
         if (count != expectedColumns) {
-            System.err.println("\t2nd row only had " + count + " rows, expected " + expectedColumns);
+            System.err.println("2nd row only had " + count + " rows, expected " + expectedColumns);
             return null;
         }
 
@@ -134,7 +132,7 @@ public class SwgExcelConverter {
         String[] types = new String[count];
         for (int i = 0; i < count; i++) {
             String type = row.getCell(i).getStringCellValue();
-            types[i] = type;
+            types[i] = type.substring(0, 1).toLowerCase() + type.substring(1);
             size += type.length() + 1;
         }
 
@@ -148,7 +146,6 @@ public class SwgExcelConverter {
         }
 
         type.setChunkData(data);
-        System.out.println("\tInserted chunk TYPE");
         return types;
     }
 
@@ -159,7 +156,7 @@ public class SwgExcelConverter {
         int count = row.getPhysicalNumberOfCells();
         // Use > because empty cells are not considered a "physical cell"
         if (count > expectedColumns) {
-            System.err.println("\tRow " + row.getRowNum() + " has " + count + " cells, expected " + expectedColumns);
+            System.err.println("Row " + row.getRowNum() + " has " + count + " cells, expected " + expectedColumns);
             return null;
         }
 
@@ -180,7 +177,7 @@ public class SwgExcelConverter {
                     parseDataCell(types, dataRow, i, cell.getNumericCellValue());
                     break;
                 default:
-                    System.out.println("\tUNK CELL TYPE: " + cell.getCellType());
+                    System.out.println("UNK CELL TYPE: " + cell.getCellType());
             }
         }
         return dataRow;
@@ -202,12 +199,12 @@ public class SwgExcelConverter {
             int i = ((Double) value).intValue();
             row.values[cellNum] = i;
         } else {
-            System.err.println("\tCan't parse cell value " + value.getClass().getName());
+            System.err.println("Can't parse cell value " + value.getClass().getName());
         }
     }
 
     private void parseDataEmptyCell(String[] types, DatatableRow row, int cellNum) {
-        String type = types[cellNum].toLowerCase();
+        String type = types[cellNum];
         String defValue = null;
 
         if (type.length() > 1) {
@@ -227,6 +224,18 @@ public class SwgExcelConverter {
                     row.values[cellNum] = Integer.valueOf(defValue);
                 else
                     row.values[cellNum] = 0;
+                break;
+            case "f":
+                if (defValue != null)
+                    row.values[cellNum] = Float.valueOf(defValue);
+                else
+                    row.values[cellNum] = (float) 0;
+                break;
+            case "l":
+                if (defValue != null)
+                    row.values[cellNum] = Long.valueOf(defValue);
+                else
+                    row.values[cellNum] = (long) 0;
                 break;
             default:
                 System.err.println("\tDon't know how to parse type " + type + " for an empty cell!");
